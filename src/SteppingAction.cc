@@ -83,6 +83,8 @@ ELoss.StepLength = step->GetStepLength() / um;
 // Primary particle data addition
 G4Track *Track = step->GetTrack();
 G4int ParentID = Track->GetParentID();
+
+// G4cout <<step->GetTrack()->GetStepLength() / CLHEP::mm << " "<<detector->fStepLimit->GetUserMaxStepLength(*step->GetTrack()) / CLHEP::mm<<" "<<handle->GetVolume(0)->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl;
 if (ParentID==0) // Transferring data
 	{
 		//processes
@@ -100,6 +102,7 @@ if (ParentID==0) // Transferring data
 			strncpy(PrimaryMaterial.Material, pmaterial.data(), 24);
 			PrimaryMaterial.Material[24]='\0';
 			PrimaryData.Energy = Track->GetKineticEnergy() / MeV;
+			PrimaryData.EnergyTot = Track->GetKineticEnergy() / MeV + step->GetTotalEnergyDeposit() / MeV;
 			G4ThreeVector pposition = Track->GetPosition();    
 			PrimaryData.X = pposition.getX() / um;
 			PrimaryData.Y = pposition.getY() / um;
@@ -111,7 +114,7 @@ if (ParentID==0) // Transferring data
 			PrimaryData.EventID = eventaction->GetEventID();
 			PrimaryData.EDep = step->GetTotalEnergyDeposit() / MeV;
 			PrimaryData.StepLength = step->GetStepLength() / um;
-			PrimaryData.Time=step->GetTrack()->GetGlobalTime();
+			PrimaryData.Time=step->GetTrack()->GetGlobalTime() / ns;
 		}
 		runaction->AddPrimaryTrackPoint(PrimaryData, PrimaryName, PrimaryMaterial, PrimaryProcess);
 	}

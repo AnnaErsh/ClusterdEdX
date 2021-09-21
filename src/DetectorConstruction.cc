@@ -25,11 +25,13 @@
 
 
 DetectorConstruction::DetectorConstruction()
+:fStepLimit(NULL)
 {
 }
 
 DetectorConstruction::~DetectorConstruction()
 {
+  delete fStepLimit;
 }
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
@@ -101,6 +103,10 @@ G4LogicalVolume* CH_log =
     new G4LogicalVolume(CH_sol, CH, "CH_log");
 CH_log->SetVisAttributes(VisCyan);
 CH_log->SetRegion(DetectorRegion);
+
+G4double maxStep = 0.5*mm;
+fStepLimit = new G4UserLimits(maxStep);
+CH_log->SetUserLimits(fStepLimit);
     
 // Physical Volumes
 G4RotationMatrix NoRot;

@@ -6,6 +6,9 @@
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4StepLimiterPhysics.hh"
+#include "G4StepLimiter.hh"
+#include "G4VPhysicsConstructor.hh"
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
@@ -81,13 +84,23 @@ ShortLivedConstructor.ConstructParticle();
 
 void PhysicsList::ConstructProcess()
 {
-AddTransportation();
-ConstructEM();
-ConstructHad();
-ConstructIonPh();
-// ConstructDecay();
-// ConstructRadioactiveDecay();
-// ConstructMuMinusCapture();
+	AddTransportation();
+	ConstructEM();
+	ConstructHad();
+	ConstructIonPh();
+	ConstructStoppingPhysics();
+
+	auto myParticleIterator=GetParticleIterator();
+	myParticleIterator->reset();
+
+	while( (*myParticleIterator)() )
+	{
+		G4ParticleDefinition * particle = myParticleIterator->value();
+    G4String               particleName = particle->GetParticleName();
+    G4ProcessManager     * manager = particle->GetProcessManager();
+   	G4StepLimiter* stepLimiter = new G4StepLimiter();
+   	manager->AddDiscreteProcess(stepLimiter);
+	}
 }
 
 //*********************

@@ -43,6 +43,7 @@ typedef struct  __attribute__((packed)){
     G4double EventID;
     G4double ID;
     G4double Energy;
+    G4double EnergyTot;
     G4double X;
     G4double Y;
     G4double Z;

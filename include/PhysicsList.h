@@ -2,12 +2,15 @@
 #define PhysicsList_header
 
 #include "G4VUserPhysicsList.hh"
+#include "G4ProcessManager.hh"
 
 class PhysicsList: public G4VUserPhysicsList
 {
     public:
 	PhysicsList();
 	~PhysicsList();
+
+	G4ProcessManager* pmanager = NULL;
 	
     protected:
 	void ConstructParticle();
