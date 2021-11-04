@@ -32,33 +32,48 @@ G4ThreeVector SourcePosition;
 switch (Config.GetSourceType())
 	{
 	case 1: // D source
+	{
 		ParticleGun->SetParticleDefinition(G4Deuteron::DeuteronDefinition());
 		EnergyDist->SetEnergyDisType("Mono");
 		PositionDist->SetPosDisType("Point"); 
 		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
 	break;
-		
+	}
 	case 2: // T source
+	{
 		ParticleGun->SetParticleDefinition(G4Triton::TritonDefinition());
 		EnergyDist->SetEnergyDisType("Mono");
 		PositionDist->SetPosDisType("Point"); 
 		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
 	break;
-
+	}
 	case 3: // alpha source
+	{
 		ParticleGun->SetParticleDefinition(G4Alpha::AlphaDefinition());
 		EnergyDist->SetEnergyDisType("Mono");
 		PositionDist->SetPosDisType("Point"); 
 		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
 	break;
-
+	}
 	case 4: // proton source
+	{
 		ParticleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
 		EnergyDist->SetEnergyDisType("Mono");
 		PositionDist->SetPosDisType("Point"); 
 		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
 	break;
-
+	}
+	case 5: // He3 source
+	{
+		G4int Z = 2, A = 3, Estar = 0 * keV;
+		G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z, A, Estar);
+		ParticleGun->SetParticleDefinition(ion);
+		ParticleGun->SetParticleCharge(2.0*eplus);
+		EnergyDist->SetEnergyDisType("Mono");
+		PositionDist->SetPosDisType("Point"); 
+		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
+	break;
+	}
 	default:
 	G4cerr << "Unknown source type!\n";
 	}
@@ -102,6 +117,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
+		  // G4cerr<<Energy<<G4endl;
 		  delete energy;
 		}
 		break;
@@ -128,6 +144,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
+		  // G4cerr<<Energy<<G4endl;
 		  delete energy;
 		}
 		break;
@@ -142,10 +159,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 		  EnergyDist = ParticleGun->GetCurrentSource()->GetEneDist();
 		  {
 	      G4double EnergyProb;
-	      energy->SetParameter( 0, -12.6);
-	      energy->SetParameter( 1, -0.005186);
-	      energy->SetParameter( 2, -3639);
-	      energy->SetParameter( 3, 7.205);
+	      energy->SetParameter( 0, -2.493);
+	      energy->SetParameter( 1, -0.03745);
+	      energy->SetParameter( 2, -9.473);
+	      energy->SetParameter( 3, -0.03745);
 	      G4double max = energy->GetMaximum(0.5, 150);
 	      do
 	      {
@@ -154,6 +171,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
+// G4cerr<<Energy<<G4endl;
 		  delete energy;
 		}
 		break;
@@ -196,8 +214,38 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
+		  // G4cerr<<Energy<<G4endl;
 		  delete energy_low;
 		  delete energy_high;
+		}
+		break;
+
+		case 5: // He3 source
+		{
+			AngularDist = ParticleGun->GetCurrentSource()->GetAngDist();
+			AngularDist->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+
+			// Energy generation
+			TF1* energy = new TF1 ("energy", "exp([0]+[1]*x)+exp([2]+[3]*x)", 0.5, 150.);
+			EnergyDist = ParticleGun->GetCurrentSource()->GetEneDist();
+			{
+				G4double EnergyProb;
+				energy->SetParameter( 0, 4.235);
+				energy->SetParameter( 1, -0.03479);
+				energy->SetParameter( 2, 5.762);
+				energy->SetParameter( 3, -0.034);	
+				G4double max = energy->GetMaximum(0.5, 150);
+				do
+				{
+
+					Energy = 0.5 + 149.5 * G4UniformRand();
+					EnergyProb = (1. / (max * 1.01)) * energy->Eval(Energy);
+				} while (EnergyProb < G4UniformRand());
+			}
+			EnergyDist->SetMonoEnergy(Energy*MeV);
+					  // G4cerr<<Energy<<G4endl;
+
+			delete energy;
 		}
 		break;
 

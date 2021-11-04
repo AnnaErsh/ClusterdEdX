@@ -5,13 +5,13 @@
 
 ConfigArray::ConfigArray()
 {
-const int numparams = 9;	// Number of parameters + 1
+const int numparams = 10;	// Number of parameters + 1
 FILE* conf_file;
 char str[150];
 char val[50];
 int i=-1;
 const char* params[numparams] = {"source=", "events=", "continue=" ,"energy=",
-				"visual=", "tracking=", "session=", "interface=", 
+				"density=", "visual=", "tracking=", "session=", "interface=", 
 				"NULL"};
 val[49]='\0';
 interface[19]='\0';
@@ -20,6 +20,7 @@ source=1;
 events=1000;
 cont=0;
 energy=1;
+density = 1;
 calibr_source_pos=50.;
 passive_shielding_and_veto=0;
 concrete_ceiling_and_floor=0;
@@ -63,13 +64,15 @@ while (fgets(str,150,conf_file)!=NULL)
 		break;
 	case 3: energy=strtod(val, NULL);
 		break;
-	case 4: visual=strtol(val, NULL, 10);  
+	case 4: density=strtod(val, NULL);
 		break;
-	case 5: tracking=strtol(val, NULL, 10);
+	case 5: visual=strtol(val, NULL, 10);  
 		break;
-	case 6: session=strtol(val, NULL, 10);
+	case 6: tracking=strtol(val, NULL, 10);
 		break;
-	case 7: strncpy(interface, val, 19);
+	case 7: session=strtol(val, NULL, 10);
+		break;
+	case 8: strncpy(interface, val, 19);
 		break;
 	default: G4cerr << "Unknown parameter: ";
     };
@@ -101,6 +104,11 @@ return cont;
 G4double ConfigArray::GetParticleEnergy(void)
 {
 return energy;
+}
+
+G4double ConfigArray::GetMaterialDensity(void)
+{
+return density;
 }
 
 int ConfigArray::IsVisualizationNeeded(void)

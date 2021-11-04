@@ -69,9 +69,11 @@ Iron->AddElement(Fe, 1);
 // density was taken from here
 // https://indico.cern.ch/event/716539/contributions/3245948/attachments/1798384/2933344/VCI2019_PARSA.pdf
 G4Material* CH =
-    new G4Material("CH", density=0.97*g/cm3, 2);
+    new G4Material("CH", density=Config.GetMaterialDensity()*g/cm3, 2);
 CH->AddElement(C, 1);
 CH->AddElement(H, 1);
+
+// G4cout<<"density = "<<Config.GetMaterialDensity()<<G4endl;
 
 // Solids
 G4RotationMatrix NoRot_sol;

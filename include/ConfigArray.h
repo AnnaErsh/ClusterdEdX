@@ -12,6 +12,7 @@ class ConfigArray
 	G4long GetEventNumber();
 	int IsContinuationNeeded();
 	G4double GetParticleEnergy();
+	G4double GetMaterialDensity();
 	G4double GetCalibrationSourceYPosition();
 	int IsPassiveShieldingAndVetoNeeded();
         int IsConcreteNeeded();
@@ -38,6 +39,7 @@ class ConfigArray
 	long int events;
 	int cont;
 	double energy;
+	double density;
 	double calibr_source_pos;
 	int passive_shielding_and_veto;
         int concrete_ceiling_and_floor;
