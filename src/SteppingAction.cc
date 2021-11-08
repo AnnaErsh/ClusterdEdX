@@ -144,4 +144,22 @@ runaction->AddParticle(ParticleData, ParticleName, ParticleCreatorProcess, ELoss
 
 }
 
+G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
+{
+ //Example of Birk attenuation law in organic scintillators.
+ //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
+ //
+ G4Material* material = aStep->GetTrack()->GetMaterial();
+ G4double birk1       = material->GetIonisation()->GetBirksConstant();
+ G4double destep      = aStep->GetTotalEnergyDeposit();
+ G4double stepl       = aStep->GetStepLength();  
+ G4double charge      = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+ //
+ G4double response = destep;
+ if (birk1*destep*stepl*charge != 0.)
+   {
+     response = destep/(1. + birk1*destep/stepl);
+   }
+ return response;
+}
 

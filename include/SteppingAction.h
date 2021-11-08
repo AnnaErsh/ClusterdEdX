@@ -91,28 +91,29 @@ class EventAction;
 
 class SteppingAction : public G4UserSteppingAction
 {
-    public:
-	SteppingAction(DetectorConstruction*, RunAction*, EventAction*) ;
-	~SteppingAction();
+  public:
+  	SteppingAction(DetectorConstruction*, RunAction*, EventAction*) ;
+  	~SteppingAction();
 	
-	void UserSteppingAction(const G4Step*);
+	  void UserSteppingAction(const G4Step*);
 	
-    private:
-        void PartDataFiller(const G4Track* Track);
+  private:
+    void PartDataFiller(const G4Track* Track);
+    G4double BirksAttenuation(const G4Step*);
         
-	DetectorConstruction* detector;
-	RunAction* runaction;
-	EventAction* eventaction;
+	  DetectorConstruction* detector;
+  	RunAction* runaction;
+  	EventAction* eventaction;
 
-	PrimData PrimaryData;
-	PrimName PrimaryName;
-	PrimMaterial PrimaryMaterial;
-        PrimProcess PrimaryProcess;
-        EnergyLoss ELoss;
-        
-        PartData ParticleData;
-        PartName ParticleName;
-        PartCreatorProcess ParticleCreatorProcess;
+  	PrimData PrimaryData;
+  	PrimName PrimaryName;
+  	PrimMaterial PrimaryMaterial;
+    PrimProcess PrimaryProcess;
+    EnergyLoss ELoss;
+    
+    PartData ParticleData;
+    PartName ParticleName;
+    PartCreatorProcess ParticleCreatorProcess;
 };
 
 #endif
