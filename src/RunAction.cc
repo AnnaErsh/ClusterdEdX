@@ -56,7 +56,7 @@ RunBranch = RunTree->Branch("RunData", &RunData,
 EventBranch = EventTree->Branch("EventData", 0,
 	    "EventID/D:ParticleEnergy:EnergyLoss:X:Y:Z:DirX:DirY:DirZ");
 PrimaryDataBranch = PrimaryTree->Branch("PrimaryData", 0,
-                                        "EventID/D:ID:Energy:EnergyTot:X:Y:Z:Momentum_X:Momentum_Y:Momentum_Z:EDep:StepLength:Time");
+                                        "EventID/D:ID:Energy:EnergyTot:X:Y:Z:Momentum_X:Momentum_Y:Momentum_Z:EDep:Ecorr:StepLength:Time");
 PrimaryNameBranch = PrimaryTree->Branch("PrimaryName", 0,
 	    "Name/C");
 PrimaryMaterialBranch = PrimaryTree->Branch("PrimaryMaterialName", 0,

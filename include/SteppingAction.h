@@ -51,6 +51,7 @@ typedef struct  __attribute__((packed)){
     G4double Momentum_Y;
     G4double Momentum_Z;
     G4double EDep;
+    G4double Ecorr;
     G4double StepLength;
     G4double Time;
 } PrimData;

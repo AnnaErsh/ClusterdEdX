@@ -52,7 +52,6 @@ class RunAction : public G4UserRunAction
 	TBranch* ELossBranch;
 
 	RData RunData;
-
 };
 
 #endif

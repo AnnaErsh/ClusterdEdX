@@ -113,6 +113,7 @@ if (ParentID==0) // Transferring data
 			PrimaryData.Momentum_Z = pmomentum.getZ() / MeV;
 			PrimaryData.EventID = eventaction->GetEventID();
 			PrimaryData.EDep = step->GetTotalEnergyDeposit() / MeV;
+			PrimaryData.Ecorr = BirksAttenuation(step);
 			PrimaryData.StepLength = step->GetStepLength() / um;
 			PrimaryData.Time=step->GetTrack()->GetGlobalTime() / ns;
 		}
@@ -150,7 +151,16 @@ G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
  //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
  //
  G4Material* material = aStep->GetTrack()->GetMaterial();
- G4double birk1       = material->GetIonisation()->GetBirksConstant();
+ // G4double birk1       = material->GetIonisation()->GetBirksConstant();
+ // this is the coefficient for protons!!!
+ G4double birk1;
+ if(Config.GetSourceType() == 3) // alpha
+ 	birk1 = 0.009 / (Config.GetMaterialDensity()*g/cm3) * g/(MeV * cm2); 
+ else if(Config.GetSourceType() == 4 || // proton // https://www.researchgate.net/publication/255682948_Light_Output_Response_of_GSOCe_Scintillator_to_Deuterons
+ 				 Config.GetSourceType() == 1 || // D 			// claim for p and D in a different scintillator birks coefficient was the same
+ 				 Config.GetSourceType() == 2)   // T
+  birk1 = 0.0208 * cm / MeV; // https://arxiv.org/pdf/1204.3666.pdf
+
  G4double destep      = aStep->GetTotalEnergyDeposit();
  G4double stepl       = aStep->GetStepLength();  
  G4double charge      = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
