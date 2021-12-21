@@ -150,11 +150,11 @@ IonPhysicsList->ConstructProcess();
 
 #include "G4DecayPhysics.hh"
 
-// void PhysicsList::ConstructDecay()
-// {
-// G4VPhysicsConstructor* DecayPhysicsList = new G4DecayPhysics();
-// DecayPhysicsList->ConstructProcess();
-// }
+ void PhysicsList::ConstructDecay()
+ {
+ G4VPhysicsConstructor* DecayPhysicsList = new G4DecayPhysics();
+ DecayPhysicsList->ConstructProcess();
+ }
 
 #include "G4StoppingPhysics.hh"
 

@@ -74,6 +74,14 @@ switch (Config.GetSourceType())
 		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
 	break;
 	}
+	case 6: // mu source
+	{
+		ParticleGun->SetParticleDefinition(G4MuonMinus::MuonMinusDefinition());
+		EnergyDist->SetEnergyDisType("Mono");
+		PositionDist->SetPosDisType("Point"); 
+		PositionDist->SetCentreCoords(G4ThreeVector(0.*cm, 0*cm, -1000.*cm));
+	break;
+	}
 	default:
 	G4cerr << "Unknown source type!\n";
 	}
@@ -244,6 +252,33 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 			}
 			EnergyDist->SetMonoEnergy(Energy*MeV);
 					  // G4cerr<<Energy<<G4endl;
+
+			delete energy;
+		}
+		break;
+
+		case 6: // mu source
+		{
+			AngularDist = ParticleGun->GetCurrentSource()->GetAngDist();
+			AngularDist->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+
+			// Energy generation
+			TF1* energy = new TF1 ("energy", "landau", 0.5, 2000.);
+			EnergyDist = ParticleGun->GetCurrentSource()->GetEneDist();
+			{
+				G4double EnergyProb;
+				energy->SetParameter( 0, 7.88650e+04);
+				energy->SetParameter( 1, 2.54808e+02);
+				energy->SetParameter( 2, 8.39547e+01);
+				G4double max = energy->GetMaximum(0.5, 2000);
+				do
+				{
+					Energy = 0.5 + 1999.5 * G4UniformRand();
+					EnergyProb = (1. / (max * 1.01)) * energy->Eval(Energy);
+				} while (EnergyProb < G4UniformRand());
+			}
+			EnergyDist->SetMonoEnergy(Energy*MeV);
+			// G4cerr<<Energy<<G4endl;
 
 			delete energy;
 		}

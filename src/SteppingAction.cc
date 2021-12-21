@@ -116,6 +116,9 @@ if (ParentID==0) // Transferring data
 			PrimaryData.Ecorr = BirksAttenuation(step);
 			PrimaryData.StepLength = step->GetStepLength() / um;
 			PrimaryData.Time=step->GetTrack()->GetGlobalTime() / ns;
+
+			// G4cout<<step->GetStepLength()<<" "<<step->GetStepLength() / um<<" "<<step->GetStepLength() * um<<" "<<um<<" "<<mm<<" "<<cm<<G4endl;
+			// G4cout<<step->GetTotalEnergyDeposit() / MeV<<" "<<BirksAttenuation(step)<<G4endl;
 		}
 		runaction->AddPrimaryTrackPoint(PrimaryData, PrimaryName, PrimaryMaterial, PrimaryProcess);
 	}
@@ -145,6 +148,11 @@ runaction->AddParticle(ParticleData, ParticleName, ParticleCreatorProcess, ELoss
 
 }
 
+double dEdXFromBirks(double Ecorr, double step, double kb)
+{
+	return Ecorr/(1 - kb * Ecorr / step);
+}
+
 G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
 {
  //Example of Birk attenuation law in organic scintillators.
@@ -154,22 +162,27 @@ G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
  // G4double birk1       = material->GetIonisation()->GetBirksConstant();
  // this is the coefficient for protons!!!
  G4double birk1;
- if(Config.GetSourceType() == 3) // alpha
- 	birk1 = 0.009 / (Config.GetMaterialDensity()*g/cm3) * g/(MeV * cm2); 
+ if(Config.GetSourceType() == 3 || Config.GetSourceType() == 5) // alpha
+ 	birk1 = 0.009/Config.GetMaterialDensity();
+ 	// birk1 = 0.009 * g/(MeV * cm2) / (Config.GetMaterialDensity()*g/cm3); 
  else if(Config.GetSourceType() == 4 || // proton // https://www.researchgate.net/publication/255682948_Light_Output_Response_of_GSOCe_Scintillator_to_Deuterons
- 				 Config.GetSourceType() == 1 || // D 			// claim for p and D in a different scintillator birks coefficient was the same
+ 				 Config.GetSourceType() == 1 || // D 			// claims for p and D in a different scintillator birks coefficient was the same
  				 Config.GetSourceType() == 2)   // T
-  birk1 = 0.0208 * cm / MeV; // https://arxiv.org/pdf/1204.3666.pdf
+  birk1 = 0.0208 /** cm / MeV*/; // https://arxiv.org/pdf/1204.3666.pdf
 
- G4double destep      = aStep->GetTotalEnergyDeposit();
- G4double stepl       = aStep->GetStepLength();  
+ G4double destep      = aStep->GetTotalEnergyDeposit() / MeV;
+ G4double stepl       = aStep->GetStepLength() / cm;  
  G4double charge      = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
- //
+
  G4double response = destep;
  if (birk1*destep*stepl*charge != 0.)
    {
      response = destep/(1. + birk1*destep/stepl);
    }
+
+   // G4cout<<Config.GetSourceType()<<G4endl;
+   // G4cout<<Config.GetMaterialDensity()<<" "<<birk1<<G4endl;
+   // G4cout<<"!"<<" "<<destep<<" "<<response<<" "<<destep/stepl<<" "<<response/stepl<<" "<<birk1<<" "<<dEdXFromBirks(response, stepl, birk1)<<G4endl;
  return response;
 }
 

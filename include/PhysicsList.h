@@ -27,7 +27,7 @@ class PhysicsList: public G4VUserPhysicsList
 	void ConstructEM();
 	void ConstructHad();
 	void ConstructIonPh();
-	// void ConstructDecay();
+	void ConstructDecay();
 	void ConstructStoppingPhysics();
 	// void ConstructRadioactiveDecay();
 	// void ConstructMuMinusCapture();
