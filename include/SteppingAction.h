@@ -102,7 +102,7 @@ class SteppingAction : public G4UserSteppingAction
     void PartDataFiller(const G4Track* Track);
     G4double BirksAttenuation(const G4Step*);
         
-	  DetectorConstruction* detector;
+	DetectorConstruction* detector;
   	RunAction* runaction;
   	EventAction* eventaction;
 

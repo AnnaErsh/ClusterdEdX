@@ -24,7 +24,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 {
 run->GetRunID();
 if (Config.IsContinuationNeeded()==1) 
-    // It is the only way to save/restore status into/from the user defined file
+    
     CLHEP::HepRandom::getTheEngine()->restoreStatus("MMRandom.status"); 
 CLHEP::HepRandom::showEngineStatus();
 if (Config.IsContinuationNeeded()==1) 

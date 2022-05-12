@@ -4,10 +4,8 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TLeafD.h"
-#include "TSpline.h"
 #include "TF1.h"
 #include "G4Event.hh"
-#include "G4Poisson.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -41,11 +39,7 @@ if (EventID % 100 == 0)
     G4cout << EventID << " events reached\n";
     G4cout.flush();
     }
-}
-
-double EventAction::TSplineWrapper(double *x, double*)
-{
-return spline->Eval(x[0]);
+  part_sec.clear();
 }
 
 void EventAction::AddEnergyDeposit(G4double destep)
@@ -76,7 +70,3 @@ G4double EventAction::GetEventID()
 {
 return EventData.EventID;
 }
-
-
-
-

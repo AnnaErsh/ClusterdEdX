@@ -68,20 +68,6 @@ G4ShortLivedConstructor ShortLivedConstructor;
 ShortLivedConstructor.ConstructParticle();
 }
 
-#include "G4RegionStore.hh"
-// void PhysicsList::SetCuts()
-// {
-//     G4double DetectorCutValue = 2.*um;
-    
-//     SetDefaultCutValue(100.*um);
-//     SetCutsWithDefault();
-    
-//     G4Region* DetectorRegion = G4RegionStore::GetInstance()->GetRegion("DetectorRegion");
-//     G4ProductionCuts* DetectorCuts = new G4ProductionCuts();
-//     DetectorCuts->SetProductionCut(DetectorCutValue);
-//     DetectorRegion->SetProductionCuts(DetectorCuts);
-// }
-
 void PhysicsList::ConstructProcess()
 {
 	AddTransportation();
@@ -118,9 +104,6 @@ EmStandardPhysicsList->ConstructProcess();
 
 G4EmExtraPhysics* EmExtraPhysicsList = new G4EmExtraPhysics();
 EmExtraPhysicsList->ConstructProcess();
-
-// G4VPhysicsConstructor* OpticalPhysicsList = new G4OpticalPhysics();
-// OpticalPhysicsList->ConstructProcess();
 }
 
 //*********************
@@ -136,7 +119,6 @@ G4VPhysicsConstructor* HadronPhysicsList = new G4HadronPhysicsINCLXX();
 HadronPhysicsList->ConstructProcess();
 }
 
-// #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
 void PhysicsList::ConstructIonPh()
 {
@@ -163,12 +145,3 @@ void PhysicsList::ConstructStoppingPhysics()
 G4VPhysicsConstructor* StoppingPhysicsList = new G4StoppingPhysics();
 StoppingPhysicsList->ConstructProcess();
 }
-
-// #include "G4RadioactiveDecayPhysics.hh"
-
-// void PhysicsList::ConstructRadioactiveDecay()
-// {
-// G4VPhysicsConstructor* RadioactiveDecayPhysicsList = new G4RadioactiveDecayPhysics();
-// RadioactiveDecayPhysicsList->ConstructProcess();
-// }
-

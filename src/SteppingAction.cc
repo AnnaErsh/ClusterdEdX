@@ -28,8 +28,10 @@ void  SteppingAction::PartDataFiller(const G4Track* Track)
 	strncpy(ParticleCreatorProcess.Process, pprocessname.data(), 24);
 	ParticleCreatorProcess.Process[24]='\0';
 	ParticleData.EventID = eventaction->GetEventID();
-	// G4cout<<ParticleData.EventID<<G4endl;
 	ParticleData.ID = Track->GetTrackID();
+
+	// G4cout<<ParticleData.ID<<G4endl;
+
 	ParticleData.ParentID = Track->GetParentID();
 	strncpy(ParticleName.Name, pname.data(), 19);
 	ParticleName.Name[19]='\0';
@@ -83,6 +85,15 @@ ELoss.StepLength = step->GetStepLength() / um;
 // Primary particle data addition
 G4Track *Track = step->GetTrack();
 G4int ParentID = Track->GetParentID();
+
+if (ParentID==1)
+{
+	G4ParticleDefinition *particle;
+	particle = Track->GetDefinition();
+	G4String pname = particle->GetParticleName();
+	// G4cerr<<"! "<<Track->GetTrackID()<<" "<<ParentID<<" "<<pname<<" "<<eventaction->GetEventID()<<G4endl;
+	eventaction->part_sec.insert(std::make_pair(Track->GetTrackID(), pname));
+}
 
 // G4cout <<step->GetTrack()->GetStepLength() / CLHEP::mm << " "<<detector->fStepLimit->GetUserMaxStepLength(*step->GetTrack()) / CLHEP::mm<<" "<<handle->GetVolume(0)->GetLogicalVolume()->GetMaterial()->GetName()<<G4endl;
 if (ParentID==0) // Transferring data
@@ -159,7 +170,6 @@ G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
  //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
  //
  G4Material* material = aStep->GetTrack()->GetMaterial();
- // G4double birk1       = material->GetIonisation()->GetBirksConstant();
  // this is the coefficient for protons!!!
  G4double birk1;
  if(Config.GetSourceType() == 3 || Config.GetSourceType() == 5) // alpha
@@ -180,9 +190,6 @@ G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
      response = destep/(1. + birk1*destep/stepl);
    }
 
-   // G4cout<<Config.GetSourceType()<<G4endl;
-   // G4cout<<Config.GetMaterialDensity()<<" "<<birk1<<G4endl;
-   // G4cout<<"!"<<" "<<destep<<" "<<response<<" "<<destep/stepl<<" "<<response/stepl<<" "<<birk1<<" "<<dEdXFromBirks(response, stepl, birk1)<<G4endl;
  return response;
 }
 

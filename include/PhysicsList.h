@@ -15,7 +15,7 @@ class PhysicsList: public G4VUserPhysicsList
     protected:
 	void ConstructParticle();
 	void ConstructProcess();
-        // void SetCuts();
+
     private:	
 	void ConstructBosons();
 	void ConstructLeptons();
@@ -29,8 +29,6 @@ class PhysicsList: public G4VUserPhysicsList
 	void ConstructIonPh();
 	void ConstructDecay();
 	void ConstructStoppingPhysics();
-	// void ConstructRadioactiveDecay();
-	// void ConstructMuMinusCapture();
 };
 
 #endif

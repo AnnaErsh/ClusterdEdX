@@ -125,7 +125,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
-		  // G4cerr<<Energy<<G4endl;
 		  delete energy;
 		}
 		break;
@@ -152,7 +151,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
-		  // G4cerr<<Energy<<G4endl;
 		  delete energy;
 		}
 		break;
@@ -179,7 +177,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	      } while (EnergyProb < G4UniformRand());
 		  }
 		  EnergyDist->SetMonoEnergy(Energy*MeV);
-// G4cerr<<Energy<<G4endl;
 		  delete energy;
 		}
 		break;

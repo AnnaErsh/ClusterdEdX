@@ -6,6 +6,8 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "TSpline.h"
+#include <set>
+#include <utility>
 
 typedef struct { 
     G4double EventID;
@@ -38,17 +40,12 @@ class EventAction: public G4UserEventAction
 	void SetParticlePosition(G4ThreeVector);
 	void SetParticleMomentumDirection(G4ThreeVector);
 	G4double GetEventID();
-	
+	std::set<std::pair<int, G4String>> part_sec;
+
     private:
 
 	RunAction* runaction;
 	EvData EventData;
-
-	TSpline3 *spline;
-	
-	double TSplineWrapper(double*, double*);
-
-
 };
 
 #endif
